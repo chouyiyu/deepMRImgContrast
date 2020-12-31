@@ -1,5 +1,9 @@
 # deep MR Image Contrast Classification
 automatically identify the contrast of brain MRI scans using deep learning 
+## Installation
+```
+
+```
 ## How to use it
 ```
 python3 deepImgContrast.py --img1 /path/to/image1 --img2 /path/to/image2 --gpu 0 
