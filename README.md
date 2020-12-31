@@ -1,4 +1,4 @@
-# deepMRImgContrast
+# deep MR Imgage Contrast Classification
 automatically identify the contrast of MRI scans
 ## How to use it
 ```
