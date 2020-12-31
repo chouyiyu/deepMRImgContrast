@@ -2,7 +2,7 @@
 automatically identify the contrast of brain MRI scans using deep learning 
 ## Installation
 ```
-
+git clone https://github.com/chouyiyu/deepMRImgContrast.git
 ```
 ## How to use it
 ```
