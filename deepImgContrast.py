@@ -108,9 +108,66 @@ def dist(model,embedding_size,imgA,imgB):
     print("img2:{}".format(imgB))    
     print("Distance:{}".format(dist[:-1]))
 
+# classification of the MR image 
+def classify(my_model,embedding_size,img):
+ 
+    input_image_shape = (92, 108, 92, 1)
+
+    # creating an empty network
+    testing_embeddings = create_base_network(input_image_shape,
+                                             embedding_size=embedding_size)
+    # Grabbing the weights from the trained network
+    for layer_target, layer_source in zip(testing_embeddings.layers, my_model.layers[2].layers):
+        weights = layer_source.get_weights()
+        layer_target.set_weights(weights)
+        del weights
+
+    test=np.zeros((6, 92,108,92))
+    img0=nib.load('template/t1_template.nii')
+    img0_data=normalize(img0.get_data(),0)
+    img1=nib.load('template/t1c_template.nii')
+    img1_data=normalize(img1.get_data(),0)
+    img2=nib.load('template/t2_template.nii')
+    img2_data=normalize(img2.get_data(),0)
+    img3=nib.load('template/fl_template.nii')
+    img3_data=normalize(img3.get_data(),0)
+    img4=nib.load('template/flc_template.nii')
+    img4_data=normalize(img4.get_data(),0)
+
+    test[0,:,:,:]=img0_data
+    test[1,:,:,:]=img1_data
+    test[2,:,:,:]=img2_data
+    test[3,:,:,:]=img3_data
+    test[4,:,:,:]=img4_data
+   
+    img5=nib.load(img)
+    img5_data=normalize(img5.get_data(),0)
+
+    test[5,:,:,:]=img5_data
+
+    x_embeddings = testing_embeddings.predict(np.reshape(test, (len(test), 92, 108, 92, 1)))
+ 
+    pdist = pairwise_distance(x_embeddings, squared=True)
+    distM=eval(pdist)
+    dist=(distM[:,-1])
+ 
+    index=np.argmin(dist[:-1])
+    if index==0:
+        contrast='T1'
+    elif index==1:
+        contrast='post contrast T1'
+    elif index==2:
+        contrast='T2'
+    elif index==3:
+        contrast='FLAIR'
+    elif index==4:
+        contrast='post contrast FLAIR'
+
+    print("Image:{} -- {}".format(img,contrast))        
        
 def get_args():
 	parser = argparse.ArgumentParser()
+	parser.add_argument("--mode",type=str, default='dist')
 	parser.add_argument("--img1", type=str)
 	parser.add_argument("--img2", type=str)
 	parser.add_argument("--gpu", type=str,default='-1') # default is for running on CPU mode; enter 0,1,2,..... for GPU mode
@@ -141,5 +198,11 @@ if __name__ == "__main__":
 	print("Loaded model from disk")
 
 	embedding_size =32
-	# compute the distance between img1 and img2
-	dist(loaded_model,embedding_size,args.img1,args.img2)
+	
+	if args.mode=='dist':
+		# compute the distance between img1 and img2
+		dist(loaded_model,embedding_size,args.img1,args.img2)
+
+	elif args.mode=='classify':
+		# classify the MR image contrast
+		classify(loaded_model,embedding_size,args.img1)
