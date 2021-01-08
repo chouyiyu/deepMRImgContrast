@@ -15,7 +15,7 @@ urllib
 argparse
 ```
 ## How to use it
-option 1: classify the MR image contrast by finding the shortest distance among the support set saved under /template including T1, post contrast T1, T2, FLAIR and post contrast FLAIR sequences.
+option 1: classify the MR image contrast by finding the shortest distance among the support set provided under /template including T1, post contrast T1, T2, FLAIR and post contrast FLAIR sequences.
 ```
 python3 deepImgContrast.py --mode classify --img1 /path/to/image --gpu 0
 ```
