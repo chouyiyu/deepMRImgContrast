@@ -25,4 +25,7 @@ python3 deepImgContrast.py --mode dist --img1 /path/to/image1 --img2 /path/to/im
 ```
 Input images must be in NIfTI format and rigidly registered to the MNI152 template. The image dimension must be padded as 92x108x92 with voxel size 2mm^3. By default, deepImgContrast will run on CPU mode, set the option --gpu to 0,1,2.... for running on GPU mode. 
 
+
+
+
 This project is licensed under the terms of the GNU General Public License v3.0
