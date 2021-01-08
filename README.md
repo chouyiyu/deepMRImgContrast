@@ -6,6 +6,7 @@ git clone https://github.com/chouyiyu/deepMRImgContrast.git
 ```
 ## Prerequisites
 ```
+python3
 keras
 tensorflow
 numpy
