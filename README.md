@@ -11,8 +11,6 @@ keras
 tensorflow
 numpy
 nibabel
-urllib
-argparse
 ```
 ## How to use it
 option 1: classify the MR image contrast by finding the shortest distance among the support set provided under /template including T1, post contrast T1, T2, FLAIR and post contrast FLAIR sequences.
