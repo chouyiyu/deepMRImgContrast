@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings('ignore',category=FutureWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
 from keras.models import Model, load_model
 from keras.layers import Input, Flatten, Dense, concatenate,  Dropout, Conv3D, MaxPooling3D, BatchNormalization
 from keras.optimizers import Adam
@@ -11,6 +15,11 @@ from tensorflow.keras.backend import eval
 import argparse
 from keras.models import model_from_json
 from urllib.request import urlopen
+
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 def pairwise_distance(feature, squared=False):
 
