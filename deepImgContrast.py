@@ -21,7 +21,7 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
-def pairwise_distance(feature, squared=False):
+def pairwise_distance(feature):
 
     pairwise_distances_squared = math_ops.add(
         math_ops.reduce_sum(math_ops.square(feature), axis=[1], keepdims=True),
@@ -31,15 +31,9 @@ def pairwise_distance(feature, squared=False):
             keepdims=True)) - 2.0 * math_ops.matmul(feature,
                                                     array_ops.transpose(feature))
 
-    pairwise_distances_squared = math_ops.maximum(pairwise_distances_squared, 0.0)
+    pairwise_distances = math_ops.maximum(pairwise_distances_squared, 0.0)
 
     error_mask = math_ops.less_equal(pairwise_distances_squared, 0.0)
-
-    if squared:
-        pairwise_distances = pairwise_distances_squared
-    else:
-        pairwise_distances = math_ops.sqrt(
-            pairwise_distances_squared + math_ops.to_float(error_mask) * 1e-16)
 
     pairwise_distances = math_ops.multiply(
         pairwise_distances, math_ops.to_float(math_ops.logical_not(error_mask)))
@@ -49,6 +43,7 @@ def pairwise_distance(feature, squared=False):
     mask_offdiagonals = array_ops.ones_like(pairwise_distances) - array_ops.diag(
         array_ops.ones([num_data]))
     pairwise_distances = math_ops.multiply(pairwise_distances, mask_offdiagonals)
+    
     return pairwise_distances
 
 
@@ -109,7 +104,7 @@ def dist(model,embedding_size,imgA,imgB):
 
     x_embeddings = testing_embeddings.predict(np.reshape(test, (len(test), 92, 108, 92, 1)))
  
-    pdist = pairwise_distance(x_embeddings, squared=True)
+    pdist = pairwise_distance(x_embeddings)
     distM=eval(pdist)
  
     dist=(distM[:,-1])
@@ -156,7 +151,7 @@ def classify(my_model,embedding_size,img):
 
     x_embeddings = testing_embeddings.predict(np.reshape(test, (len(test), 92, 108, 92, 1)))
  
-    pdist = pairwise_distance(x_embeddings, squared=True)
+    pdist = pairwise_distance(x_embeddings)
     distM=eval(pdist)
     dist=(distM[:,-1])
  
