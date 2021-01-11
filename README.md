@@ -13,7 +13,7 @@ numpy
 nibabel
 ```
 ## How to use it
-option 1: classify the MR image contrast by finding the shortest distance among the support set provided under /template.
+option 1: classify the MR image contrast by finding the shortest distance among the support set provided under /template.  Currently, the available contrast classes are T1, post contrast T1, FLAIR, post contrast T2, and T2.
 ```
 python3 deepImgContrast.py --mode classify --img1 /path/to/image --gpu 0
 ```
